@@ -36,7 +36,7 @@ class Game:
 		self.shoot_time = 0
 
 		# crt
-		self.crt = CRT()
+		# self.crt = CRT()
 
 		self.laser_sound = pygame.mixer.Sound('../sounds/laser.wav')
 		self.laser_sound.set_volume(0.1)
@@ -47,9 +47,13 @@ class Game:
 		self.laserhit_sound = pygame.mixer.Sound('../sounds/laser_hit.wav')
 		self.laserhit_sound.set_volume(0.02)
 
-		self.music = pygame.mixer.Sound('../sounds/music.wav')
+		self.music = pygame.mixer.Sound('../sounds/music.mp3')
 		self.music.set_volume(0.1)
 		self.music.play(loops = -1)
+
+		#font for score
+		pygame.freetype.init()
+		self.myfont = pygame.freetype.Font('../joystix monospace.ttf', 20)
 
 	def create_upgrade(self,pos):
 		upgrade_type = choice(UPGRADES)
@@ -77,6 +81,9 @@ class Game:
 		for i in range(self.player.hearts):
 			x = 2 + i * (self.heart_surf.get_width() + 2)
 			self.display_surface.blit(self.heart_surf,(x,4))
+
+	def display_score(self):
+		self.myfont.render_to(self.display_surface, (1100, 4), "Score:" + str(self.player.score))
 
 	def upgrade_collision(self):
 		overlap_sprites = pygame.sprite.spritecollide(self.player,self.upgrade_sprites,True)
@@ -138,19 +145,20 @@ class Game:
 			# draw the frame
 			self.all_sprites.draw(self.display_surface)
 			self.display_hearts()
+			self.display_score()
 
 			# crt styling
-			self.crt.draw()
+			# self.crt.draw()
 
 			# update window
 			pygame.display.update()
 
-class CRT:
-	def __init__(self):
-		vignette = pygame.image.load('../graphics/other/tv.png').convert_alpha()
-		self.scaled_vignette = pygame.transform.scale(vignette,(WINDOW_WIDTH,WINDOW_HEIGHT))
-		self.display_surface = pygame.display.get_surface()
-		self.create_crt_lines()
+# class CRT:
+# 	def __init__(self):
+# 		vignette = pygame.image.load('../graphics/other/tv.png').convert_alpha()
+# 		self.scaled_vignette = pygame.transform.scale(vignette,(WINDOW_WIDTH,WINDOW_HEIGHT))
+# 		self.display_surface = pygame.display.get_surface()
+# 		self.create_crt_lines()
 
 	def create_crt_lines(self):
 		line_height = 4
