@@ -4,6 +4,7 @@ WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 
 # Randomizes the block_map
+
 ran_blocks = []
 ran_blocks2 = []
 
