@@ -56,6 +56,7 @@ class Player(pygame.sprite.Sprite):
 
         self.hearts = 3
         self.score = 0
+        self.blockKill = 0
 
         # laser
         self.laser_amount = 2
@@ -238,12 +239,13 @@ class Ball(pygame.sprite.Sprite):
 
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, block_type, pos, groups, surfacemaker, create_upgrade):
+    def __init__(self, block_type, pos, groups, surfacemaker, create_upgrade, player):
         super().__init__(groups)
         self.surfacemaker = surfacemaker
         self.image = self.surfacemaker.get_surf(COLOR_LEGEND[block_type], (BLOCK_WIDTH, BLOCK_HEIGHT))
         self.rect = self.image.get_rect(topleft=pos)
         self.old_rect = self.rect.copy()
+        self.player = player
 
         # damage information
         self.health = int(block_type)
@@ -259,4 +261,5 @@ class Block(pygame.sprite.Sprite):
         else:
             if randint(0, 10) < 9:
                 self.create_upgrade(self.rect.center)
+            self.player.blockKill += 1
             self.kill()

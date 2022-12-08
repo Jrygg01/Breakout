@@ -3,6 +3,7 @@ from settings import *
 from sprites import Player, Ball, Block, Upgrade, Projectile
 from surfacemaker import SurfaceMaker
 from random import choice, randint
+import pygame.freetype
 
 class Game:
 	def __init__(self):
@@ -54,6 +55,7 @@ class Game:
 		#font for score
 		pygame.freetype.init()
 		self.myfont = pygame.freetype.Font('../joystix monospace.ttf', 20)
+		self.myfont1 = pygame.freetype.Font('../joystix monospace.ttf', 60)
 
 	def create_upgrade(self,pos):
 		upgrade_type = choice(UPGRADES)
@@ -75,7 +77,7 @@ class Game:
 					# find the x and y position for each individual block
 					x = col_index * (BLOCK_WIDTH + GAP_SIZE) + GAP_SIZE // 2
 					y = TOP_OFFSET + row_index * (BLOCK_HEIGHT + GAP_SIZE) + GAP_SIZE // 2
-					Block(col,(x,y),[self.all_sprites,self.block_sprites],self.surfacemaker,self.create_upgrade)
+					Block(col,(x,y),[self.all_sprites,self.block_sprites],self.surfacemaker,self.create_upgrade, self.player)
 
 	def display_hearts(self):
 		for i in range(self.player.hearts):
@@ -84,6 +86,11 @@ class Game:
 
 	def display_score(self):
 		self.myfont.render_to(self.display_surface, (1100, 4), "Score:" + str(self.player.score))
+
+	def win(self):
+		if self.player.blockKill == 72:
+			self.myfont1.render_to(self.display_surface, (435, 250), "YOU WIN!")
+			pygame.display.flip()
 
 	def upgrade_collision(self):
 		overlap_sprites = pygame.sprite.spritecollide(self.player,self.upgrade_sprites,True)
@@ -115,7 +122,8 @@ class Game:
 	def run(self):
 		last_time = time.time()
 		while True:
-			
+
+
 			# delta time
 			dt = time.time() - last_time
 			last_time = time.time()
@@ -146,6 +154,7 @@ class Game:
 			self.all_sprites.draw(self.display_surface)
 			self.display_hearts()
 			self.display_score()
+			self.win()
 
 			# crt styling
 			# self.crt.draw()
